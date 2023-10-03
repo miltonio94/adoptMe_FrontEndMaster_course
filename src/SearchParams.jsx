@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react"
 import Pet from "./Pet"
+import useBreedList from "./useBreedList";
+import Results from "./Result";
 
 const ANIMALS = ["bird", "cat", "dog", "reptile"];
-const BREED = ["French Bulldog"];
 
 const SearchParams = () => {
 
@@ -10,6 +11,7 @@ const SearchParams = () => {
   const [animal, setAnimal] = useState("");
   const [pets, setPets] = useState([]);
   const [breed, setBreed] = useState("");
+  const [breeds] = useBreedList(animal);
 
   async function requestPets() {
     const res = await fetch(
@@ -63,18 +65,14 @@ const SearchParams = () => {
               setBreed(e.target.value);
             }}>
             <option />
-            {BREED.map((breed) => (
+            {breeds.map((breed) => (
               <option key={breed}>{breed}</option>
             ))}
           </select>
         </label>
         <button>Submit</button>
       </form>
-      {
-        pets.map(pet => (
-          <Pet name={pet.name} animal={pet.animal} breed={pet.breed} key={pet.id} />
-        ))
-      }
+      <Results pets={pets} />
     </div>
   );
 };
